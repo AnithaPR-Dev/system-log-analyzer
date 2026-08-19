@@ -3,48 +3,81 @@
 #include<sstream>
 #include <string>
 #include <map>
+#include <vector>
 
 using namespace std;
 
+class LogEntry {
+	private: 
+		string date;
+		string time;
+		string severity;
+		string message;
+	public:
+		LogEntry(string d, string t, string s, string m):date(d),time(t),severity(s),message(m) {}
+		string getSeverity() const{
+			return severity;
+		}
+		string getDate() const {
+			return date;
+		}
+		void getDisplay() const{
+			cout << date << " " << time << " " << severity << " " << message << endl;
+		}
+};
+
+vector<LogEntry> fileParser (const string& fileName) {
+	vector<LogEntry> entries;
+	ifstream fileObj(fileName);
+	if(!fileObj)
+	{
+		cout << "File could not be opened" << endl;
+		return entries;
+	}
+	cout << "File opened successfully" << endl;
+	
+	string line, date, time, severity, message;
+	
+	while(getline(fileObj,line)) {
+		//cout << line << endl;
+		istringstream iss(line);
+		iss >> date >> time >> severity;
+		getline(iss >> ws,message);
+		LogEntry entry(date,time,severity,message);
+		entries.push_back(entry); 
+	} 
+	fileObj.close();
+	
+	return entries;
+}
+
 int main()
 {
-    ifstream fileObj("sample.log");
-
-    if (!fileObj)
-    {
-        cout << "File could not be opened" << endl;
-        return 1;
-    }
-
-    cout << "File opened successfully" << endl;
-
-	string line, date, time, level;
-	int infoCounter = 0, warningCounter = 0, errorCounter =0;
-	map<string,int> severityCount;
+    
+	auto result = fileParser("sample.log");
+	string filterSeverity, filterDate;
+	cout << " Type the Severity to be filtered : " ;		
+	cin >>  filterSeverity ;
+	cout << endl;
+	cout << "Type the Date of the log infos to be filtered : ";
+	cin >> filterDate ;	
+	cout << endl;
 	
-	while(getline(fileObj,line)){
-		cout << line << endl;
-		istringstream iss(line);
-		iss >> date >> time >> level;
-		severityCount[level]++;
-	/* if (level == "INFO") {
-		infoCounter++;
+	//map<string,int> severityCount;
+	bool matchFound = false;
+	for (const auto& entry : result) {
+		if (entry.getSeverity() == filterSeverity && entry.getDate() == filterDate) {
+			entry.getDisplay();
+			matchFound = true;
+		}		
+		//severityCount[entry.getSeverity()]++;
 	}
-	else if (level == "WARNING")
-	{
-		warningCounter++;
-	}
-	else if (level == "ERROR")
-	{
-		errorCounter++;
-		} */
-	}
-	for (const auto entry : severityCount) {
-	cout << entry.first << " : " << entry.second << endl; 
-	}
-	//cout << "INFO : " << infoCounter << endl << "WARNING : " << warningCounter << endl << "ERROR : " << errorCounter << endl;
-	
-	fileObj.close();
+	if (!matchFound) {
+			cout << "No matching log entries found" << endl;
+		}
+	/* for (const auto& state : severityCount) {
+		cout << state.first << " : " << state.second << endl;
+	} */
 
     return 0;
 }
