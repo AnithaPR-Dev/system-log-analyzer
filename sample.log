@@ -1,3 +1,6 @@
 2026-08-18 10:15:23 INFO System started successfully
 2026-08-18 10:16:05 WARNING Disk usage above 80%
 2026-08-18 10:17:42 ERROR Database connection failed
+
+2026-08-18
+18-08-2026 11:20:00 ERROR Invalid date format test
