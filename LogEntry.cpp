@@ -27,3 +27,8 @@ void LogEntry::getDisplay() const
               << severity << " "
               << message << std::endl;
 }
+
+std::string LogEntry::getMessage() const 
+{
+	return message;
+}

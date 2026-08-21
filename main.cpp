@@ -1,11 +1,7 @@
 #include <iostream>
-#include <fstream>
-#include<sstream>
-#include <string>
-#include <map>
-#include <vector>
 #include "LogEntry.h"
 #include "LogParser.h"
+#include "LogFilter.h"
 
 int main(int argc, char* argv[])
 {
@@ -21,31 +17,31 @@ int main(int argc, char* argv[])
 	auto result = fileParser(argv[1]);
 	
 	// Get filtering criteria from the user.
-	std::string filterSeverity, filterDate;
-	std::cout << " Type the Severity to be filtered : " ;		
+	std::string filterSeverity, filterDate, filterMessage;
+	std::cout << "Type the Severity to be filtered : " ;		
 	std::cin >>  filterSeverity ;
 	std::cout << std::endl;
 	std::cout << "Type the Date of the log infos to be filtered : ";
 	std::cin >> filterDate ;	
-	std::cout << std::endl;
+	std::cout << std::endl;	
+	std::cout << "Type the word to be searched in the Log file : " ;
+	std::getline(std::cin >> std::ws, filterMessage);
 	
-	// Used to determine whether at least one log entry matched
-    // both the requested severity and date.
-	bool matchFound = false;
+	auto extractedOutput = filterBySeverity(result,filterSeverity);
+	auto dateFiltered = filterByDate(extractedOutput, filterDate);
+	auto searchByWord = filterByWord(dateFiltered, filterMessage);
 	
 	//map<std::string,int> severityCount;	
 	// Search through all parsed log entries and display matching entries.
-	for (const auto& entry : result) {
-		if (entry.getSeverity() == filterSeverity && entry.getDate() == filterDate) {
-			entry.getDisplay();
-			matchFound = true;
-		}		
+	for (const auto& entry : searchByWord) {
+			entry.getDisplay();	
 		//severityCount[entry.getSeverity()]++;
 	}
 	// Report when the complete search finishes without finding a match
-	if (!matchFound) {
+	if (searchByWord.empty()) {
 			std::cout << "No matching log entries found" << std::endl;
 		}
+	
 		
 	// Severity statistics - currently disabled.
     // Can be re-enabled when overall severity counts are required.	

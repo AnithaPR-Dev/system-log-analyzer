@@ -25,6 +25,9 @@ public:
 
     // Displays the complete log entry.
     void getDisplay() const;
+	
+	//Returns the message info of the log entry
+	std::string LogEntry::getMessage() const ;
 };
 
 #endif
