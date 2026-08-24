@@ -19,6 +19,10 @@ std::string LogEntry::getDate() const
     return date;
 }
 
+std::string LogEntry::getTime() const{
+	return time;
+}
+
 // Displays the complete log entry in its original readable format.
 void LogEntry::getDisplay() const
 {

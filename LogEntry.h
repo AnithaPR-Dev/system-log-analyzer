@@ -28,6 +28,9 @@ public:
 	
 	//Returns the message info of the log entry
 	std::string LogEntry::getMessage() const ;
+	
+	// Returns the time info of the log entry
+	std::string LogEntry::getTime() const;
 };
 
 #endif

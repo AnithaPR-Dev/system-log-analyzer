@@ -2,6 +2,7 @@
 #include "LogEntry.h"
 #include "LogParser.h"
 #include "LogFilter.h"
+#include "LogExporter.h"
 
 int main(int argc, char* argv[])
 {
@@ -15,6 +16,7 @@ int main(int argc, char* argv[])
 	   
 	// Parse the supplied log file and store all valid log entries.
 	auto result = fileParser(argv[1]);
+	exportToJson(result, "logs.json");
 	
 	// Get filtering criteria from the user.
 	std::string filterSeverity, filterDate, filterMessage;
