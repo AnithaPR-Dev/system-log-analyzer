@@ -94,6 +94,14 @@ system-log-analyzer/
 ├── .gitignore
 └── README.md
 
+## Requirements
+
+- Visual Studio 2022 with C++ Build Tools
+- Python 3
+- FastAPI
+- Uvicorn
+- SQLite (included with Python)
+
 ## Current Status
 
 Core log parsing, filtering, JSON export, SQLite persistence, and REST API functionality are implemented.
