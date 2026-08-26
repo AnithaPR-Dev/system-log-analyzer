@@ -98,9 +98,75 @@ system-log-analyzer/
 
 - Visual Studio 2022 with C++ Build Tools
 - Python 3
-- FastAPI
-- Uvicorn
 - SQLite (included with Python)
+
+Python dependencies, including FastAPI and Uvicorn, are listed in `requirements.txt`.
+
+## How to Run
+
+### 1. Install Python Dependencies
+
+```cmd
+python -m pip install -r requirements.txt
+```
+
+### 2. Compile the C++ Application
+
+Open the Visual Studio x64 Native Tools Command Prompt and run:
+
+```cmd
+cl /EHsc main.cpp LogEntry.cpp LogParser.cpp LogFilter.cpp LogExporter.cpp
+```
+
+### 3. Run the Log Analyzer
+
+```cmd
+main.exe sample.log
+```
+
+The C++ application parses and validates the log file, supports interactive filtering, and generates `logs.json`.
+
+### 4. Load Logs into SQLite
+
+```cmd
+python log_analyzer.py
+```
+
+This reads `logs.json` and stores the log entries in `logs.db`. Duplicate entries are ignored.
+
+### 5. Start the REST API
+
+```cmd
+python -m uvicorn api:app --reload
+```
+
+The API will be available at:
+
+`http://127.0.0.1:8000`
+
+Interactive Swagger documentation:
+
+`http://127.0.0.1:8000/docs`
+
+### 6. Test the API
+
+Get all logs:
+
+```text
+GET /logs
+```
+
+Filter by severity:
+
+```text
+GET /logs?severity=ERROR
+```
+
+Get a log by ID:
+
+```text
+GET /logs/1
+```
 
 ## Current Status
 
