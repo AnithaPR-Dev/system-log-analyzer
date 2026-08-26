@@ -1,15 +1,26 @@
 from fastapi import FastAPI
 import sqlite3
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
-@app.get("/logs")
-def get_logs(severity: str | None = None):
+def get_connection():
     connection = sqlite3.connect("logs.db")
     connection.row_factory = sqlite3.Row
-    cursor = connection.cursor()
+    return connection
 
+@app.get("/logs")
+def get_logs(severity: str | None = None):
+    connection = get_connection()
+    cursor = connection.cursor()
+    
+    allowed = {"INFO", "WARNING", "ERROR", "DEBUG", "CRITICAL"}
     if severity:
+        if severity and severity not in allowed:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid severity"
+                )
         cursor.execute(
             "SELECT * FROM logs WHERE severity = ?",
             (severity,)
@@ -24,8 +35,7 @@ def get_logs(severity: str | None = None):
  
 @app.get("/logs/{log_id}")
 def get_log(log_id: int):
-    connection = sqlite3.connect("logs.db")
-    connection.row_factory = sqlite3.Row
+    connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute(
@@ -40,4 +50,6 @@ def get_log(log_id: int):
     if row:
         return dict(row)
 
-    return {"message": "Log not found"}
+    raise HTTPException(
+    status_code=404,
+    detail="Log not found")

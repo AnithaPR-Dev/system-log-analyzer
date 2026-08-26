@@ -1,0 +1,13 @@
+# C++ build files
+*.exe
+*.obj
+
+# Python generated files
+__pycache__/
+*.pyc
+
+# Local database
+logs.db
+
+# Generated JSON output
+logs.json
