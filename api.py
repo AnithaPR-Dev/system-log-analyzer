@@ -4,8 +4,9 @@ from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
+DATABASE = "logs.db"
 def get_connection():
-    connection = sqlite3.connect("logs.db")
+    connection = sqlite3.connect(DATABASE)
     connection.row_factory = sqlite3.Row
     return connection
 

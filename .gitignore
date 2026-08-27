@@ -9,5 +9,8 @@ __pycache__/
 # Local database
 logs.db
 
+# Test database
+test_logs.db
+
 # Generated JSON output
 logs.json
