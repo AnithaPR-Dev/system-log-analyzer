@@ -21,3 +21,6 @@ jobs:
 
       - name: Run tests
         run: python -m pytest test_api.py -v
+        
+      - name: Compile C++ application
+        run: g++ -std=c++17 -Wall -Wextra -pedantic main.cpp LogEntry.cpp LogParser.cpp LogFilter.cpp LogExporter.cpp -o log_analyzer
