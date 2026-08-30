@@ -27,10 +27,10 @@ public:
     void getDisplay() const;
 	
 	//Returns the message info of the log entry
-	std::string LogEntry::getMessage() const ;
+	std::string getMessage() const ;
 	
 	// Returns the time info of the log entry
-	std::string LogEntry::getTime() const;
+	std::string getTime() const;
 };
 
 #endif
