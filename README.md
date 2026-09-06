@@ -43,10 +43,6 @@ LLM Log Analysis
 - Validates API query parameters
 - Returns appropriate HTTP 400 and 404 responses
 
-
-### REST API
-
-```markdown
 ## REST API
 
 The FastAPI service provides endpoints for retrieving and analyzing logs.
