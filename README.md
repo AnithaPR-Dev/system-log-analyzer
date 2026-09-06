@@ -6,28 +6,26 @@ The application parses and validates system log files using C++, exports valid l
 
 ## Architecture
 
-sample.log
-    |
-    v
-C++ Log Parser
-    |
-    v
-LogEntry objects
-    |
-    v
-JSON Exporter
-    |
-    v
-logs.json
-    |
-    v
-Python
-    |
-    v
-SQLite Database
-    |
-    v
+```text
+System Log File
+      |
+      v
+C++ Parser / Validation / Filtering
+      |
+      v
+JSON Export (logs.json)
+      |
+      v
+Python Import
+      |
+      v
+SQLite Database (logs.db)
+      |
+      v
 FastAPI REST API
+      |
+      v
+LLM Log Analysis
 
 ## Features
 
