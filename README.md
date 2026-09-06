@@ -43,27 +43,26 @@ LLM Log Analysis
 - Validates API query parameters
 - Returns appropriate HTTP 400 and 404 responses
 
+
+### REST API
+
+```markdown
 ## REST API
 
-### Get all logs
+The FastAPI service provides endpoints for retrieving and analyzing logs.
 
-GET /logs
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/logs` | Retrieve all logs |
+| GET | `/logs?severity=ERROR` | Filter logs by severity |
+| GET | `/logs/{log_id}` | Retrieve a specific log |
+| POST | `/analyze/{log_id}` | Analyze a log using an LLM |
 
-### Filter logs by severity
+The analysis endpoint sends the selected log's severity, message, date, and time to the LLM and returns:
 
-GET /logs?severity=ERROR
-
-Supported severity values:
-
-INFO, WARNING, ERROR, DEBUG, CRITICAL
-
-### Get log by ID
-
-GET /logs/{log_id}
-
-Example:
-
-GET /logs/1
+- Explanation of the log entry
+- Possible causes
+- Recommended troubleshooting or corrective actions
 
 ## Technologies
 
