@@ -1,6 +1,6 @@
 # System Log Analyzer
 
-A multi-language system log analysis project built with C++, Python, SQLite, FastAPI, and LLM integration.
+**A multi-language system log analysis project built with C++, Python, SQLite, FastAPI, and LLM integration.**
 
 The application parses and validates system log files using C++, exports valid log entries to JSON, stores them in SQLite using Python, and exposes the stored logs through a FastAPI REST API. It also integrates an LLM to analyze individual log entries and provide explanations, possible causes, and recommended troubleshooting actions.
 
