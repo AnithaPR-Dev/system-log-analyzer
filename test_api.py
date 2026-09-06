@@ -1,9 +1,12 @@
+import os
+os.environ.setdefault("OPENAI_API_KEY", "test-key")
+
 import api
 from fastapi.testclient import TestClient
 from api import app
 import sqlite3
 import pytest
-import os
+from unittest.mock import patch, MagicMock
 
 @pytest.fixture(autouse=True, scope="module")
 def setup_test_database():
@@ -26,6 +29,9 @@ def setup_test_database():
             UNIQUE(date, time, severity, message)
         )
     """)
+    cursor.execute("DELETE FROM logs")
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='logs'")
+    
     cursor.executemany("""
         INSERT OR IGNORE INTO logs (date, time, severity, message)
         VALUES (?, ?, ?, ?)
@@ -37,9 +43,6 @@ def setup_test_database():
     
     yield
 
-    # if os.path.exists("test_logs.db"):
-        # os.remove("test_logs.db")
-    
 api.DATABASE = "test_logs.db"
 client = TestClient(app)
 
@@ -77,4 +80,13 @@ def test_invalid_severity():
 def test_log_not_found():
     response = client.get("/logs/999")
     assert response.status_code == 404
-    
+   
+def test_analyze_log():
+    mock_response = MagicMock()
+    mock_response.output_text = "Mock log analysis"
+
+    with patch("api.client.responses.create", return_value=mock_response):
+        response = client.post("/analyze/3")
+
+    assert response.status_code == 200
+    assert response.json()["analysis"] == "Mock log analysis"
