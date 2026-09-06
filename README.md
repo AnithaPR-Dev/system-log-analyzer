@@ -26,6 +26,7 @@ FastAPI REST API
       |
       v
 LLM Log Analysis
+```
 
 ## Features
 
@@ -42,6 +43,14 @@ LLM Log Analysis
 - Provides REST API endpoints using FastAPI
 - Validates API query parameters
 - Returns appropriate HTTP 400 and 404 responses
+- Provides LLM-based log analysis through the OpenAI API
+- Generates explanations, possible causes, and troubleshooting recommendations
+- Reads the API key securely from an environment variable
+- Handles unavailable LLM quota with HTTP 503
+- Uses pytest and FastAPI TestClient for automated API testing
+- Mocks external LLM calls during automated tests
+- Uses GitHub Actions for continuous integration
+- Automatically compiles the C++ application and runs Python tests on pushes and pull requests
 
 ## REST API
 
@@ -63,15 +72,23 @@ The analysis endpoint sends the selected log's severity, message, date, and time
 ## Technologies
 
 - C++ — parsing, validation, OOP, STL algorithms and filtering
-- Python — JSON processing and database integration
-- SQLite — persistent log storage and SQL queries
-- FastAPI — REST API
+- Python — JSON processing, database integration, API and LLM integration
+- SQLite / SQL — persistent log storage and querying
+- FastAPI — REST API development
+- OpenAI API — LLM-based log analysis
 - JSON — data exchange between C++ and Python
-- Git/GitHub — version control
+- pytest / FastAPI TestClient — automated API testing
+- Git / GitHub — version control
+- GitHub Actions — continuous integration
 
 ## Project Structure
 
+
+```text
 system-log-analyzer/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── LogEntry.h
 ├── LogEntry.cpp
 ├── LogParser.h
@@ -83,9 +100,12 @@ system-log-analyzer/
 ├── main.cpp
 ├── log_analyzer.py
 ├── api.py
+├── test_api.py
+├── requirements.txt
 ├── sample.log
 ├── .gitignore
 └── README.md
+```
 
 ## Requirements
 
@@ -127,7 +147,17 @@ python log_analyzer.py
 
 This reads `logs.json` and stores the log entries in `logs.db`. Duplicate entries are ignored.
 
-### 5. Start the REST API
+### 5. Configure the OpenAI API Key
+
+Set the API key as an environment variable:
+
+```cmd
+set OPENAI_API_KEY=your_api_key_here
+```
+
+The API key is read from the environment and should not be committed to source control.
+
+### 6. Start the REST API
 
 ```cmd
 python -m uvicorn api:app --reload
@@ -141,7 +171,7 @@ Interactive Swagger documentation:
 
 `http://127.0.0.1:8000/docs`
 
-### 6. Test the API
+### 7. Test the API
 
 Get all logs:
 
@@ -161,8 +191,41 @@ Get a log by ID:
 GET /logs/1
 ```
 
+Analyze a log using the LLM:
+
+```text
+POST /analyze/3
+```
+
+## Automated Testing
+
+The REST API is tested using pytest and FastAPI TestClient.
+
+The test suite covers log retrieval, severity filtering, invalid requests, missing logs, and the LLM analysis endpoint.
+
+External OpenAI API calls are mocked during automated testing, keeping the tests independent of API credits and external service availability.
+
+Run the tests locally with:
+
+```cmd
+python -m pytest test_api.py -v
+```
+
+## Continuous Integration
+
+GitHub Actions runs automatically on pushes and pull requests.
+
+The CI pipeline:
+
+1. Checks out the repository.
+2. Compiles the C++ application on Ubuntu using `g++`.
+3. Installs the Python dependencies.
+4. Runs the pytest API test suite.
+
 ## Current Status
 
-Core log parsing, filtering, JSON export, SQLite persistence, and REST API functionality are implemented.
+The core System Log Analyzer project is complete.
 
-Additional testing and project polish are in progress.
+Implemented functionality includes C++ log parsing, validation and filtering, JSON export, Python-based SQLite persistence, FastAPI REST endpoints, LLM-based log analysis, automated API testing with mocked external API calls, and GitHub Actions continuous integration.
+
+Live LLM analysis requires a configured OpenAI API key with available API credits.
